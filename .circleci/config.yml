@@ -18,17 +18,13 @@ jobs:
           command: |
             ./build.sh
             docker run -d --name jsondiff -p 8080:80 polyglotted/jsondiff
-            sleep 10
-            curl localhost:8080
-            curl --write-out %{http_code} --silent --output /dev/null localhost:8080
+            docker inspect polyglotted/jsondiff
       - run:
           name: Collect Artifacts
           command: |
             mkdir -p ${artifact_dir}/docker/
             docker images > ${artifact_dir}/docker/images.txt
             docker inspect polyglotted/jsondiff > ${artifact_dir}/docker/info.txt
-            docker ps
-            docker logs jsondiff > ${artifact_dir}/docker/logs.txt
           when: always
       - store_artifacts:
           path: artifacts
